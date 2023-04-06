@@ -1,14 +1,7 @@
-import React from "react";
-import Skeleton from "react-loading-skeleton";
 import Masonry from "react-masonry-css";
+import { breakpointColumnsObj } from "./MasonryGridBreakPoints";
 
 export const SkeletonImageGrid = () => {
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
-  };
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}

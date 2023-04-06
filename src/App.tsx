@@ -18,10 +18,9 @@ function App() {
               element={
                 <div className="w-full">
                   <SearchBox />
-                  <div className="w-full max-h-screen overflow-y-scroll ">
-                    <div className="max-w-[1280px] mx-auto">
-                      <ImageContainer />
-                    </div>
+                  {/* TODO: think about padding */}
+                  <div className="max-w-[1280px] h-auto mt-10 mx-auto p-5">
+                    <ImageContainer />
                   </div>
                 </div>
               }

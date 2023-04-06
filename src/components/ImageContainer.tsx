@@ -1,26 +1,58 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
-import { unsplashImageData } from "../common/unsplashImageData";
 import { getPhotosFromUnsplash } from "../requests/images";
+import { ImageGird } from "./ImageGird";
 import { SkeletonImageGrid } from "./SkeletonImageGrid";
 
 export const ImageContainer = () => {
   // first, see if the search param is set or not;
-  const query = "schools";
+  const query = "office";
   const [searchTerm, _] = useQueryParam("search", StringParam);
-  const [imageData, setImageData] = useState<null | Array<unsplashImageData>>(
-    null
-  );
+  const [page, setPage] = useState(1);
 
-  const { isError, isLoading, data, error } = useQuery(
-    ["getPhotosFromUnsplash"],
-    () => getPhotosFromUnsplash(query),
+  const {
+    data,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    isLoading,
+    ...result
+  } = useInfiniteQuery(
+    "getPhotosFromUnsplashInfinite",
+    ({ pageParam = 1 }) => {
+      return getPhotosFromUnsplash(query, pageParam);
+    },
     {
-      staleTime: Infinity,
-      enabled: !searchTerm === false, // only do the network request if the search term is present
+      getNextPageParam: (lastPage) => lastPage.length + 1,
     }
   );
 
-  return <>{<SkeletonImageGrid />}</>;
+  const newArray = data?.pages.flatMap((page) => page.results);
+
+  const handleFetchNextPage = () => {
+    fetchNextPage({ pageParam: page + 1 });
+    setPage(page + 1);
+  };
+
+  return (
+    <>
+      {isLoading ? <SkeletonImageGrid /> : null}
+      {data?.pages && newArray ? (
+        <>
+          <ImageGird images={newArray} />
+        </>
+      ) : null}
+      {/* <button
+        onClick={handleFetchNextPage}
+        disabled={!hasNextPage || isFetchingNextPage}
+        className="p-10 text-white bg-yellow-400"
+      >
+        Next Page
+      </button> */}
+    </>
+  );
 };

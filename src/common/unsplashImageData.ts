@@ -1,5 +1,6 @@
 export interface unsplashImageData {
   id: string;
+  alt_description: string;
   created_at: string;
   width: number;
   height: number;
