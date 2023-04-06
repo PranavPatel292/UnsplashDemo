@@ -39,7 +39,7 @@ export const ImageGrid = ({ images }: ImageContainerProps) => {
           >
             <div className="flex justify-center">
               <img
-                src={image.urls.small}
+                src={image.urls.regular}
                 alt={image.alt_description}
                 onLoad={handleImageLoad}
                 style={{
