@@ -1,4 +1,3 @@
-import { unsplashImageData } from "../common/unsplashImageData";
 import api from "./axios";
 
 // get the client from env file;

@@ -1,9 +1,14 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { useQueryClient } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import * as Yup from "yup";
 
 const validateSearch = Yup.object().shape({
-  search: Yup.string().required("Cannot be empty"),
+  search: Yup.string()
+    .test("comma", "Search query cannot contain commas", (value) => {
+      return value ? !value.includes(",") : true;
+    })
+    .required("Cannot be empty"),
 });
 
 export const SearchBox = () => {
@@ -11,6 +16,7 @@ export const SearchBox = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [_, setQuerySearchTerm] = useQueryParam("search", StringParam);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const queryClient = useQueryClient();
 
   // whenever the user types in an input field
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +32,6 @@ export const SearchBox = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // to stop refreshing of the page
     event.preventDefault();
-
     // validate the search term
     try {
       await validateSearch.validate({ search: searchTerm });
@@ -34,7 +39,9 @@ export const SearchBox = () => {
       setErrors({});
     } catch (validationErrors: any) {
       const newErrors: { [key: string]: string } = {};
+
       newErrors["inputError"] = validationErrors.message;
+
       setQuerySearchTerm(undefined);
       setErrors(newErrors);
     }
@@ -87,6 +94,11 @@ export const SearchBox = () => {
               Search
             </button>
           </div>
+          {errors.inputError === "Search query cannot contain commas" ? (
+            <p className="text-red-500 mt-2">
+              Search query cannot contain commas
+            </p>
+          ) : null}
         </form>
       </div>
     </div>
