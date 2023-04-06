@@ -41,7 +41,7 @@ export const SearchBox = () => {
   };
 
   return (
-    <div className="absolute w-full p-5 bg-[#1F2937]">
+    <div className="sticky top-0 w-full p-5 bg-[#1F2937] z-[1]">
       <div className="w-full max-w-[1280px] mx-auto ">
         <form onSubmit={handleSubmit}>
           <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">

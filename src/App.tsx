@@ -2,8 +2,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { SearchBox } from "./components/SearchBox";
 import { QueryParamProvider } from "use-query-params";
 import { ReactRouter6Adapter } from "use-query-params/adapters/react-router-6";
-import { Test } from "./components/Test";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ImageContainer } from "./components/ImageContainer";
 
 function App() {
   const queryClient = new QueryClient();
@@ -16,10 +16,12 @@ function App() {
             <Route
               path="/"
               element={
-                <div className="w-full h-screen bg-[#111827]">
+                <div className="w-full">
                   <SearchBox />
-                  <div className="w-full max-w-[1280px] mx-auto">
-                    {/* <Test /> */}
+                  <div className="w-full max-h-screen overflow-y-scroll ">
+                    <div className="max-w-[1280px] mx-auto">
+                      <ImageContainer />
+                    </div>
                   </div>
                 </div>
               }
