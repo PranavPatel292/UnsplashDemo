@@ -19,6 +19,7 @@
     "react-masonry-css": "^1.0.16",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.10.0",
+    "react-toastify": "^9.1.2",
     "universal-cookie": "^4.0.4",
     "use-intersection": "^0.2.1",
     "use-query-params": "^2.2.1",

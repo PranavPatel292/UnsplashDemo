@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useInfiniteQuery } from "react-query";
+import { isError, useInfiniteQuery } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import { getPhotosFromUnsplash } from "../requests/images";
 import { ImageGird } from "./ImageGird";
 import { SkeletonImageGrid } from "./SkeletonImageGrid";
 import InfiniteScroll from "react-infinite-scroller";
+import { showToast } from "../common/Toast";
 
 export const ImageContainer = () => {
   // first, see if the search param is set or not;
@@ -20,6 +21,7 @@ export const ImageContainer = () => {
     isFetchingNextPage,
     isFetchingPreviousPage,
     isLoading,
+    isError,
     refetch,
     ...result
   } = useInfiniteQuery(
@@ -30,6 +32,9 @@ export const ImageContainer = () => {
     {
       getNextPageParam: (lastPage) => lastPage.length + 1,
       enabled: !searchTerm === false, // only query if the search term is present;
+      onError: () => {
+        showToast.error("Something went wrong");
+      },
     }
   );
 

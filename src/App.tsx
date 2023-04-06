@@ -5,6 +5,9 @@ import { ReactRouter6Adapter } from "use-query-params/adapters/react-router-6";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ImageContainer } from "./components/ImageContainer";
 import { CookiesProvider } from "react-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const queryClient = new QueryClient();
 
@@ -24,6 +27,17 @@ function App() {
                     <div className="max-w-[1280px] h-auto mt-10 mx-auto p-5">
                       <ImageContainer />
                     </div>
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                    />
                   </div>
                 }
               />
