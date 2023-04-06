@@ -6,7 +6,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Test />
+      <div className="w-full h-screen bg-[#111827]"></div>
     </QueryClientProvider>
   );
 }
