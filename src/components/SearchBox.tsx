@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import * as Yup from "yup";
@@ -14,7 +14,10 @@ const validateSearch = Yup.object().shape({
 export const SearchBox = () => {
   // initialize the state variables for input and query string parameters.
   const [searchTerm, setSearchTerm] = useState("");
-  const [_, setQuerySearchTerm] = useQueryParam("search", StringParam);
+  const [querySearchTerm, setQuerySearchTerm] = useQueryParam(
+    "search",
+    StringParam
+  );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const queryClient = useQueryClient();
 
@@ -46,6 +49,11 @@ export const SearchBox = () => {
       setErrors(newErrors);
     }
   };
+
+  // this is so that if query string has search term we can add that into the input box.
+  useEffect(() => {
+    if (querySearchTerm) setSearchTerm(querySearchTerm);
+  }, []);
 
   return (
     <div className="sticky top-0 w-full p-5 bg-[#1F2937] z-[1]">

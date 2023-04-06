@@ -18,7 +18,7 @@ export const ImageGird = ({ images, page }: ImageContainerProps) => {
       {images.map((image: unsplashImageData, index: number) => {
         return (
           <LazyLoad
-            key={image.id + "lazy_loading_div"}
+            key={image.urls.regular + image.id + index}
             offset={100}
             threshold={0.8}
           >

@@ -38,18 +38,27 @@ export const ImageContainer = () => {
     }
   );
 
+  useEffect(() => {
+    if (searchTerm) refetch();
+  }, [searchTerm]);
+
   const newArray = data?.pages.flatMap((page) => page.results);
 
   return (
     <>
-      {!searchTerm ? (
+      {!searchTerm && !isError ? (
         <h1 className="w-full mt-72 lg:mt-52 flex justify-center items-center text-center text-xl text-white">
           No images to display. <br />
           Please search for the images you want to find.
         </h1>
       ) : null}
       {isLoading ? <SkeletonImageGrid /> : null}
-      {searchTerm && !isLoading && data?.pages && newArray ? (
+      {isError && !isLoading ? (
+        <h1 className="w-full mt-72 lg:mt-52 flex justify-center items-center text-center text-xl text-red-500">
+          Sorry, something went wrong. Please try again later
+        </h1>
+      ) : null}
+      {searchTerm && !isError && !isLoading && data?.pages && newArray ? (
         <>
           <InfiniteScroll
             key={page}
@@ -61,7 +70,7 @@ export const ImageContainer = () => {
               }
             }}
             hasMore={hasNextPage}
-            loader={<SkeletonImageGrid page={page} />} // page number is to have key for each SkeletonImageGrid;
+            // loader={<SkeletonImageGrid page={page} />} // page number is to have key for each SkeletonImageGrid;
             threshold={500}
             useWindow={true}
           >
