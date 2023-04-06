@@ -7,17 +7,21 @@ const validateSearch = Yup.object().shape({
 });
 
 export const SearchBox = () => {
+  // initialize the state variables for input and query string parameters.
   const [searchTerm, setSearchTerm] = useState("");
-  const [querySearchTerm, setQuerySearchTerm] = useQueryParam(
-    "search",
-    StringParam
-  );
+  const [_, setQuerySearchTerm] = useQueryParam("search", StringParam);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // whenever the user types in an input field
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors({});
     setSearchTerm(event.target.value);
   };
+
+  // when user tries to search;
+  // first we need to check if the input is empty or not;
+  // if not, then we can set the query string params. or,
+  // if it is empty, then we need to show the error message.
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // to stop refreshing of the page
