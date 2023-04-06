@@ -9,5 +9,5 @@ export const Test = () => {
     { staleTime: 60000 }
   );
   console.log(data);
-  return <div>Test</div>;
+  return <div className="text-white">Test</div>;
 };
