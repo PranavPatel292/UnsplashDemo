@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
-import { isError, useInfiniteQuery } from "react-query";
+import { useEffect, useRef } from "react";
+import { useInfiniteQuery } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import { getPhotosFromUnsplash } from "../requests/images";
-import { ImageGird } from "./ImageGird";
+import { ImageGrid } from "./ImageGrid";
 import { SkeletonImageGrid } from "./SkeletonImageGrid";
-import InfiniteScroll from "react-infinite-scroller";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { showToast } from "../common/Toast";
 
 export const ImageContainer = () => {
   // first, see if the search param is set or not;
   const [searchTerm, _] = useQueryParam("search", StringParam);
-  const [page, setPage] = useState(1);
+
+  const targetRef = useRef(null);
 
   const {
     data,
@@ -25,16 +26,21 @@ export const ImageContainer = () => {
     refetch,
     ...result
   } = useInfiniteQuery(
-    "getPhotosFromUnsplashInfinite",
+    ["getPhotosFromUnsplashInfinite", searchTerm],
     ({ pageParam = 1 }) => {
       return getPhotosFromUnsplash(searchTerm as string, pageParam);
     },
     {
-      getNextPageParam: (lastPage) => lastPage.length + 1,
-      enabled: !searchTerm === false, // only query if the search term is present;
+      getNextPageParam: (lastPages, allPages) => {
+        const maxPages = Math.round(lastPages.total / 30);
+        const nextPage: number = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
+      enabled: false, // only query if the search term is present;
       onError: () => {
         showToast.error("Something went wrong");
       },
+      staleTime: Infinity,
     }
   );
 
@@ -58,25 +64,24 @@ export const ImageContainer = () => {
           Sorry, something went wrong. Please try again later
         </h1>
       ) : null}
-      {searchTerm && !isError && !isLoading && data?.pages && newArray ? (
-        <>
-          <InfiniteScroll
-            key={page}
-            pageStart={0}
-            loadMore={() => {
-              if (!isFetchingNextPage) {
-                fetchNextPage({ pageParam: page + 1 });
-                setPage(page + 1);
+      {searchTerm && hasNextPage && !isError && !isLoading && newArray ? (
+        <div className={"container max-h-[800px] overflow-y-auto"}>
+          <div>
+            <InfiniteScroll
+              dataLength={newArray.length}
+              next={fetchNextPage}
+              hasMore={hasNextPage}
+              loader={
+                <h1 className="flex justify-center text-white text-3xl">
+                  Hello
+                </h1>
               }
-            }}
-            hasMore={hasNextPage}
-            // loader={<SkeletonImageGrid page={page} />} // page number is to have key for each SkeletonImageGrid;
-            threshold={500}
-            useWindow={true}
-          >
-            <ImageGird images={newArray} key={page + "ImageGrid"} page={page} />
-          </InfiniteScroll>
-        </>
+            >
+              <ImageGrid images={newArray} key={"ImageGrid"} />
+              <div ref={targetRef}></div>
+            </InfiniteScroll>
+          </div>
+        </div>
       ) : null}
     </>
   );
