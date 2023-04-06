@@ -65,7 +65,7 @@ export const ImageContainer = () => {
         </h1>
       ) : null}
       {searchTerm && hasNextPage && !isError && !isLoading && newArray ? (
-        <div className={"container max-h-[800px] overflow-y-auto"}>
+        <div className={" max-h-[800px] overflow-y-auto"}>
           <div>
             <InfiniteScroll
               dataLength={newArray.length}
