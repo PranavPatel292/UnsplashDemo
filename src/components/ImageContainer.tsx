@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import { getPhotosFromUnsplash } from "../requests/images";
@@ -10,6 +10,7 @@ import { showToast } from "../common/Toast";
 export const ImageContainer = () => {
   // first, see if the search param is set or not;
   const [searchTerm, _] = useQueryParam("search", StringParam);
+  const [loadingNewImages, setLoadingNewImages] = useState(false);
 
   const targetRef = useRef(null);
 
@@ -36,6 +37,7 @@ export const ImageContainer = () => {
         const nextPage: number = allPages.length + 1;
         return nextPage <= maxPages ? nextPage : undefined;
       },
+      onSuccess: () => setLoadingNewImages(false),
       enabled: false, // only query if the search term is present;
       onError: () => {
         showToast.error("Something went wrong");
@@ -47,6 +49,11 @@ export const ImageContainer = () => {
   useEffect(() => {
     if (searchTerm) refetch();
   }, [searchTerm]);
+
+  const handleFetchNextPage = () => {
+    setLoadingNewImages(true);
+    fetchNextPage();
+  };
 
   const newArray = data?.pages.flatMap((page) => page.results);
 
@@ -65,17 +72,17 @@ export const ImageContainer = () => {
         </h1>
       ) : null}
       {searchTerm && hasNextPage && !isError && !isLoading && newArray ? (
-        <div className={" max-h-[800px] overflow-y-auto"}>
+        <div
+          className={" max-h-[800px] overflow-y-auto"}
+          style={{ maxHeight: "800px", overflowY: "auto" }}
+        >
           <div>
             <InfiniteScroll
               dataLength={newArray.length}
-              next={fetchNextPage}
-              hasMore={hasNextPage}
-              loader={
-                <h1 className="flex justify-center text-white text-3xl">
-                  Hello
-                </h1>
-              }
+              next={handleFetchNextPage}
+              hasMore={!loadingNewImages && hasNextPage}
+              scrollThreshold={0.2}
+              loader={<></>}
             >
               <ImageGrid images={newArray} key={"ImageGrid"} />
               <div ref={targetRef}></div>
