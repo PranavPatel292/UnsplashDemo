@@ -81,7 +81,7 @@ export const ImageContainer = () => {
               dataLength={newArray.length}
               next={handleFetchNextPage}
               hasMore={!loadingNewImages && hasNextPage}
-              scrollThreshold={0.2}
+              scrollThreshold={0.8}
               loader={<></>}
             >
               <ImageGrid images={newArray} key={"ImageGrid"} />
