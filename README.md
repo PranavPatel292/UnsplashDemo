@@ -28,7 +28,7 @@ $ yarn add
 VITE_UNSPLASH_ACCESS_KEY = YOUR_UNSPLASH_ACCESS_KEY;
 ```
 
-##### Please make sure you have this access key before starting the application. In order to get the access key please follow the [Unsplash API's authorization](https://unsplash.com/documentation#user-authentication).
+###### Please make sure you have this ACCESS_KEY before starting the application. In order to get the ACCESS_KEY please follow the [Unsplash API's authorization](https://unsplash.com/documentation#user-authentication).
 
 ###### 4) To run the project
 
