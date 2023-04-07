@@ -86,6 +86,11 @@ export const ImageContainer = () => {
             >
               <ImageGrid images={newArray} key={"ImageGrid"} />
               <div ref={targetRef}></div>
+              {!hasNextPage ? (
+                <h1 className="w-full mt-72 lg:mt-52 flex justify-center items-center text-center text-xl text-white">
+                  No more images found!
+                </h1>
+              ) : null}
             </InfiniteScroll>
           </div>
         </div>

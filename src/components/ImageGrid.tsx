@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LazyLoad from "react-lazy-load";
 import Masonry from "react-masonry-css";
-import { unsplashImageData } from "../common/unsplashImageData";
+import { unsplashImageData } from "../interfaces/unsplashImageData";
 import { breakpointColumnsObj } from "./MasonryGridBreakPoints";
 
 interface ImageContainerProps {
