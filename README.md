@@ -1,7 +1,7 @@
-# UnsplashDemo
+# Unsplash API Photo Search
 
 This project is made to use the Unsplash API's photo search service. It has a simple search bar or input field that can
-take one input parameter or keyword which is used as the query parameter for the Unsplash api. You can find more about
+take one input parameter or keyword which is used as the query parameter for the Unsplash API. You can find more about
 [Unsplash API](https://unsplash.com/documentation) here.
 
 ## How to run project
