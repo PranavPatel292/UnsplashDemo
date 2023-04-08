@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+// this is where the lazy loading of images is done using LazyLoad from 'react-lazy-load' library.
+// also this is where the Masonry gird is defined for images.
+
 import LazyLoad from "react-lazy-load";
 import Masonry from "react-masonry-css";
 import { unsplashImageData } from "../interfaces/unsplashImageData";
@@ -26,7 +28,7 @@ export const ImageGrid = ({ images }: ImageContainerProps) => {
           return (
             <LazyLoad
               key={image.id + index}
-              height={500}
+              height={500} // the size of the LazyLoad container, it is important for the threshold.
               offset={2000} // load image 1500 pixels before
               threshold={0.5}
             >

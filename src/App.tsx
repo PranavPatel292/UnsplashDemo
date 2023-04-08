@@ -10,8 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const queryClient = new QueryClient();
-
-  // to solve Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute
   return (
     <CookiesProvider>
       <BrowserRouter>
@@ -23,7 +21,6 @@ function App() {
                 element={
                   <div className="w-full">
                     <SearchBox />
-                    {/* TODO: think about padding */}
                     <div className="max-w-[1280px] h-auto mt-10 mx-auto p-5">
                       <ImageContainer />
                     </div>

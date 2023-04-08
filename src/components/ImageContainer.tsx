@@ -8,12 +8,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { showToast } from "../common/Toast";
 
 export const ImageContainer = () => {
-  // first, see if the search param is set or not;
   const [searchTerm, _] = useQueryParam("search", StringParam);
   const [loadingNewImages, setLoadingNewImages] = useState(false);
-
   const targetRef = useRef(null);
 
+  // use of the React-Query's useInfiniteQuery to get the image data seamlessly
+  // while user is scrolling.
   const {
     data,
     fetchNextPage,
@@ -42,19 +42,22 @@ export const ImageContainer = () => {
       onError: () => {
         showToast.error("Something went wrong");
       },
-      staleTime: Infinity,
+      staleTime: Infinity, // do not refetch until it is requested
     }
   );
 
+  // if the searchTerm is changed in the query string, refetch the useInfiniteQuery.
   useEffect(() => {
     if (searchTerm) refetch();
   }, [searchTerm]);
 
+  // function to handle the nextFetch request and used in InfiniteScroll.
   const handleFetchNextPage = () => {
     setLoadingNewImages(true);
     fetchNextPage();
   };
 
+  // flat the return data as they are paginated and pages are in different arrays.
   const newArray = data?.pages.flatMap((page) => page.results);
 
   return (
@@ -82,7 +85,11 @@ export const ImageContainer = () => {
               next={handleFetchNextPage}
               hasMore={!loadingNewImages && hasNextPage}
               scrollThreshold={0.8}
-              loader={<></>}
+              loader={
+                <h1 className="w-full mt-72 lg:mt-52 flex justify-center items-center text-center text-xl text-white">
+                  Loading
+                </h1>
+              }
             >
               <ImageGrid images={newArray} key={"ImageGrid"} />
               <div ref={targetRef}></div>

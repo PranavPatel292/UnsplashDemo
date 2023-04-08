@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { unsplashImageData } from "../interfaces/unsplashImageData";
 
+// Lazy Image props passed from it parent.
 interface LazyImageProps {
   image: unsplashImageData;
   width: number;
@@ -16,9 +17,16 @@ const LazyImage = ({
   imageSrc,
   lqipSrc,
 }: LazyImageProps) => {
+  // initialize state variables for images,
+  // one is used for the image source and other is used to determine if image is loaded or not.
+  // initially its value is false as image is yet to be loaded.
   const [loadedImages, setLoadedImages] = useState<Array<string>>([]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  // this function is called when the image is loaded, on the screen
+  // it defines the image height, width, with its aspect ratio.
+  // also this is where, the image loading state will be changed it value to true
+  // as the image is now loaded on the screen.
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.currentTarget;
     const { naturalWidth, naturalHeight } = img;

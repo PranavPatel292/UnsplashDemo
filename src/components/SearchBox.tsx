@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
 import { StringParam, useQueryParam } from "use-query-params";
 import * as Yup from "yup";
 
+// validation schema for the search, cannot be empty and cannot contain commas.
 const validateSearch = Yup.object().shape({
   search: Yup.string()
     .test("comma", "Search query cannot contain commas", (value) => {
@@ -19,9 +19,9 @@ export const SearchBox = () => {
     StringParam
   );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const queryClient = useQueryClient();
 
   // whenever the user types in an input field
+  // clear any previous error and set the searchTerm state.
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors({});
     setSearchTerm(event.target.value);
@@ -31,26 +31,28 @@ export const SearchBox = () => {
   // first we need to check if the input is empty or not;
   // if not, then we can set the query string params. or,
   // if it is empty, then we need to show the error message.
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // to stop refreshing of the page
     event.preventDefault();
-    // validate the search term
     try {
+      // validate the search term
       await validateSearch.validate({ search: searchTerm });
+      // if validation succeeded, then set the search query param to the value,
+      // remove any previous error.
       setQuerySearchTerm(searchTerm);
       setErrors({});
     } catch (validationErrors: any) {
+      // make a new error message and set it to setError
+      // also make sure that you remove any existing query params so that the fetch request will not perform.
       const newErrors: { [key: string]: string } = {};
-
       newErrors["inputError"] = validationErrors.message;
-
       setQuerySearchTerm(undefined);
       setErrors(newErrors);
     }
   };
 
   // this is so that if query string has search term we can add that into the input box.
+  // this happens when we reload the page that has the search term.
   useEffect(() => {
     if (querySearchTerm) setSearchTerm(querySearchTerm);
   }, []);
