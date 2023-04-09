@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { unsplashImageData } from "../interfaces/unsplashImageData";
+import { Profile } from "./Profile";
 
 // Lazy Image props passed from it parent.
 interface LazyImageProps {
@@ -8,6 +9,7 @@ interface LazyImageProps {
   height: number;
   imageSrc: string;
   lqipSrc: string;
+  data: unsplashImageData;
 }
 
 const LazyImage = ({
@@ -69,15 +71,9 @@ const LazyImage = ({
           left: 0,
           filter: imageLoaded ? "none" : "blur(5px)",
         }}
-        className={`w-full object-cover  rounded shadow-lg shadow-[#6B7280]/50 hover:shadow-green-600/40`}
+        className={`w-full object-cover  rounded shadow-lg shadow-[#6B7280]/50 mb-2`}
       />
-      <div className="absolute inset-0 hover:bg-gradient-to-b hover:rounded hover:from-transparent hover:to-black">
-        <div className="absolute inset-0 flex items-end mb-10 space-y-5 justify-left ml-1 hover:opacity-100 opacity-0">
-          <div className="flex justify-left items-left text-left text-sm text-white">
-            <p className="max-w-[40%] truncate">{image.alt_description}</p>
-          </div>
-        </div>
-      </div>
+      <Profile data={image} />
     </div>
   );
 };
